@@ -1,5 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
+import { classToClass } from 'class-transformer';
 
 import User from '@modules/users/infra/typeorm/entities/Users';
 
@@ -33,7 +34,10 @@ class ListProvidersService {
 
       if (!users) throw new AppError('User not found.');
 
-      await this.cacheProvider.save(`providers-list:${user_id}`, users);
+      await this.cacheProvider.save(
+        `providers-list:${user_id}`,
+        classToClass(users),
+      );
     }
 
     return users;
